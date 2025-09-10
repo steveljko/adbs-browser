@@ -1,5 +1,10 @@
 import browser from 'webextension-polyfill'
 
-browser.runtime.onInstalled.addListener((details: browser.Runtime.OnInstalledDetailsType) => {
-  console.log('Extension installed:', details.reason)
+browser.runtime.onInstalled.addListener(async (details: browser.Runtime.OnInstalledDetailsType) => {
+  if (details.reason === 'install') {
+    await browser.storage.local.set({
+      serverUrl: '',
+      authToken: '',
+    })
+  }
 })
