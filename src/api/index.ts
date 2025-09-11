@@ -12,6 +12,7 @@ export const createApiInstance = (): AxiosInstance => {
   instance.interceptors.request.use(
     async (config) => {
       const baseUrl: string | null = await getKey('serverUrl')
+      console.log(baseUrl)
       if (baseUrl) {
         const url: string = baseUrl.startsWith('http') 
           ? baseUrl

@@ -6,11 +6,12 @@ import { setKey } from '../helpers/storage'
 let instance: AxiosInstance = createApiInstance()
 
 export const setUrl = (url: string) => {
-  const baseUrl: string = url.startsWith('http') 
-    ? url
-    : `http://${url}`
+  const baseUrl: string = url.startsWith('http') ? url : `http://${url}`
 
-  instance.defaults.baseURL = `${baseUrl}/api`
+  const apiUrl = `${baseUrl}/api`
+  setKey('serverUrl', apiUrl)
+
+  instance.defaults.baseURL = apiUrl
 }
 
 export const api = {

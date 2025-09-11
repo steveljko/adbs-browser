@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import { relative, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import Components from 'unplugin-vue-components/vite'
+import VueRouter from 'unplugin-vue-router/vite'
 
 const isDev = process.env.NODE_ENV !== 'production'
 
@@ -27,6 +28,11 @@ export default function baseConfig(): UserConfig {
           })
         },
       },
+
+      VueRouter({
+        dts: "src/types/typed-router.d.ts",
+        routesFolder: 'src/popup/pages',
+      }),
 
       vue(),
 
