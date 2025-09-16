@@ -12,14 +12,15 @@ export const createApiInstance = (): AxiosInstance => {
   instance.interceptors.request.use(
     async (config) => {
       const baseUrl: string | null = await getKey('serverUrl')
-      console.log(baseUrl)
       if (baseUrl) {
         const url: string = baseUrl.startsWith('http') 
           ? baseUrl
           : `http://${baseUrl}`
         
-        config.baseURL = url
+        config.baseURL = `${url}/api`
       }
+
+      config.headers["X-Addon-Version"] = '0.0.0'
 
       let authToken = await getKey('authToken')
       if (authToken) config.headers.Authorization = `Bearer ${authToken}`
