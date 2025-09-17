@@ -20,7 +20,7 @@ const emit = defineEmits<{click: []}>()
 const isLoading = ref(false)
 
 const buttonClasses = computed(() => {
-  const base = 'w-full font-medium rounded-md transition duration-100 ease-in-out flex items-center justify-center mb-3'
+  const base = 'w-full font-medium rounded-md transition duration-100 ease-in-out flex items-center justify-center'
   
   const variants = {
     primary: 'bg-orange-500 hover:bg-orange-500 text-white',

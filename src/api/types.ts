@@ -7,3 +7,9 @@ export interface ApiResponse<T = any> {
 export interface PingResponse {
   status: string;
 }
+
+export interface LoginResponse {
+  status: string;
+  token: string;
+  user_name: string;
+}

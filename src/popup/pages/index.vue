@@ -1,12 +1,17 @@
 <template>
-  <Header />
-    <input
-        class="px-3 py-1 border border-gray-300"
-        v-model="serverUrl"
-        placeholder="Server URL"
+  <section class="p-4">
+    <div class="mb-4">
+      <label class="mb-3 block text-sm font-medium text-gray-500">Enter Server URL</label>
+      <input
+          class="block text-md w-full rounded-md border border-gray-300 px-3 py-2 mb-2 focus:border-orange-500 focus:outline-none"
+          v-model="serverUrl"
+          placeholder="Server URL"
+          @keydown.enter="checkConn"
         />
-    <span v-if="message">{{ message }}</span>
-    <button @click="checkConn">Save Url</button>
+      <span class="block text-sm text-red-500" v-if="message">{{ message }}</span>
+    </div>
+    <Button @click="checkConn">Connect</Button>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -22,7 +27,10 @@ const message = ref<string>('')
 
 onMounted(async () => {
   const url = await getKey("serverUrl")
-  if (url) serverUrl.value = url
+  if (url) {
+    serverUrl.value = url
+    router.push({ path: '/login' })
+  }
 })
 
 const checkConn = async () => {
@@ -33,13 +41,13 @@ const checkConn = async () => {
 
   setUrl(serverUrl.value)
 
-  const resp = await api.server.ping()
+  try {
+    const res = await api.server.ping()
 
-  if (resp.status === 200) {
-    console.log(resp)
-  } else {
+    if (res.status === 200) router.push({ path: '/login' })
+  } catch (err) {
     setKey('serverUrl', '')
-    message.value = 'Url is wrong, check it again!'
+    message.value = 'Service on this url is unreachable currently, check it again!'
   }
 }
 </script>
