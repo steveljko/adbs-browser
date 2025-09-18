@@ -1,5 +1,5 @@
 import { createApiInstance } from './index'
-import type { ApiResponse, PingResponse, LoginResponse } from './types'
+import type { ApiResponse, PingResponse, TokenStatusResponse, LoginResponse } from './types'
 import { AxiosInstance, AxiosResponse } from 'axios'
 import { setKey } from '../helpers/storage'
 
@@ -18,14 +18,16 @@ type ApiType = {
   };
   auth: {
     login: (email: string, password: string) => Promise<AxiosResponse<LoginResponse>>;
+    status: () => Promise<AxiosResponse<TokenStatusResponse>>;
   };
 };
 
 export const api: ApiType = {
   server: {
-    ping: async (): Promise<AxiosResponse<ApiResponse<PingResponse>>> => await instance.get<ApiResponse<PingResponse>>('ping')
+    ping: async (): Promise<AxiosResponse<ApiResponse<PingResponse>>> => await instance.get<ApiResponse<PingResponse>>('ping'),
   },
   auth: {
-    login: async (email: string, password: string): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('login', { email, password })
+    login: async (email: string, password: string): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('login', { email, password }),
+    status: async (): Promise<AxiosResponse<TokenStatusResponse>> => await instance.get<TokenStatusResponse>('token/status'),
   },
 }

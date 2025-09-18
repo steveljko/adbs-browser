@@ -8,6 +8,12 @@ export interface PingResponse {
   status: string;
 }
 
+type TokenStatus = 'Active' | 'Inactive' | 'Pending' | 'Revoked' | 'Suspended';
+
+export interface TokenStatusResponse {
+  status: TokenStatus;
+}
+
 export interface LoginResponse {
   status: string;
   token: string;

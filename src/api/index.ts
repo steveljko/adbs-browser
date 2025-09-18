@@ -1,5 +1,8 @@
-import { getKey } from '.././helpers/storage'
+import { getKey, removeKey } from '.././helpers/storage'
 import axios, { AxiosInstance } from 'axios'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 export const createApiInstance = (): AxiosInstance => {
   const instance = axios.create({
@@ -27,6 +30,24 @@ export const createApiInstance = (): AxiosInstance => {
 
       return config
     })
+
+    instance.interceptors.response.use(
+      (response) => {
+        return response
+      },
+      async (error) => {
+        if (error.response) {
+          const code = error.response.status
+
+          if (code === 401) {
+            await removeKey('authToken')
+            await router.push({ path: '/' })
+          }
+        }
+
+        return Promise.reject(error)
+      }
+    )
 
     return instance
 }

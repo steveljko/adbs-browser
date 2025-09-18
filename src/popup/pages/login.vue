@@ -38,7 +38,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { api } from '../../api/endpoints'
 import { useRouter } from 'vue-router'
-import { getKey, removeKey } from '../../helpers/storage'
+import { getKey, setKey, removeKey } from '../../helpers/storage'
 
 const router = useRouter()
 
@@ -66,9 +66,13 @@ const login = async () => {
     const res = await api.auth.login(
       data.fields.email,
       data.fields.password
-    );
-    console.log(res.data);
+    )
+
+    const token = res.data.token
+    setKey('authToken', token)
+
     data.loading = false
+    router.push({ path: '/wait' })
   } catch (err) {
     const errorsData = err.response.data.errors
     const errorsMap: object = {}

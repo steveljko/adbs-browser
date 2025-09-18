@@ -26,10 +26,17 @@ const serverUrl = ref<string>('')
 const message = ref<string>('')
 
 onMounted(async () => {
+  const token = await getKey("authToken")
+  if (token != null) {
+    await router.push({ path: '/wait' })
+    return
+  }
+
   const url = await getKey("serverUrl")
   if (url) {
     serverUrl.value = url
-    router.push({ path: '/login' })
+    await router.push({ path: '/login' })
+    return
   }
 })
 
