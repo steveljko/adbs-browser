@@ -15,7 +15,11 @@ export interface TokenStatusResponse {
 }
 
 export interface LoginResponse {
-  status: string;
-  token: string;
-  user_name: string;
+  access_token: string;
+  refresh_token: string;
+  user: {
+    name: string;
+    email: string;
+  },
+  expires_in: number;
 }

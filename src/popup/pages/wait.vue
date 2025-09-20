@@ -15,10 +15,11 @@ onMounted(async () => {
     const res = await api.auth.status()
 
     if (res.status === 200) {
-      status.value = "ok"
+      status.value = res.data.status
     }
   } catch (err) {
-    status.value = "fail"
+    const resStatus = err.response.data.status
+    status.value = resStatus
   }
 })
 </script>

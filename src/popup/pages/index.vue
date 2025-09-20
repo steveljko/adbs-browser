@@ -27,7 +27,7 @@ const message = ref<string>('')
 
 onMounted(async () => {
   const token = await getKey("authToken")
-  if (token != null) {
+  if (token) {
     await router.push({ path: '/wait' })
     return
   }

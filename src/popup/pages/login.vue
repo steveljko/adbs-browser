@@ -68,11 +68,11 @@ const login = async () => {
       data.fields.password
     )
 
-    const token = res.data.token
-    setKey('authToken', token)
+    const { access_token } = res.data;
+    await setKey('authToken', access_token)
 
     data.loading = false
-    router.push({ path: '/wait' })
+    await router.push({ path: '/wait' })
   } catch (err) {
     const errorsData = err.response.data.errors
     const errorsMap: object = {}
