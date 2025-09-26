@@ -6,20 +6,21 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { api } from '../../api/endpoints'
+import { useAuth } from '../../helpers/auth'
+
+const auth = useAuth()
 
 const status = ref<string>("")
 
 onMounted(async () => {
   try {
-    const res = await api.auth.status()
-
-    if (res.status === 200) {
-      status.value = res.data.status
-    }
+    const res = await auth.status()
+    console.log(res)
+    status.value = res.data.status
   } catch (err) {
-    const resStatus = err.response.data.status
-    status.value = resStatus
+    console.log(err)
+    const error = JSON.parse(err.message)
+    status.value = error.status
   }
 })
 </script>

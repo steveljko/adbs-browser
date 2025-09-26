@@ -1,10 +1,12 @@
 import browser from "webextension-polyfill";
 
-type StorageKeys = "serverUrl" | "authToken";
+type StorageKeys = "serverUrl" | "authToken" | "refreshToken" | "identifier";
 
 type StoredValues = {
   serverUrl?: string;
   authToken?: string;
+  refreshToken?: string;
+  identifier?: string;
 };
 
 export async function getKey(key: StorageKeys): Promise<string | null> {

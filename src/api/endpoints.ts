@@ -17,8 +17,9 @@ type ApiType = {
     ping: () => Promise<AxiosResponse<ApiResponse<PingResponse>>>;
   };
   auth: {
-    login: (email: string, password: string) => Promise<AxiosResponse<LoginResponse>>;
+    login: (email: string, password: string, browser_identifier: string) => Promise<AxiosResponse<LoginResponse>>;
     status: () => Promise<AxiosResponse<TokenStatusResponse>>;
+    refresh: (browser_identifier: string, refresh_token: string) => Promise<AxiosResponse<LoginResponse>>;
   };
 };
 
@@ -27,7 +28,8 @@ export const api: ApiType = {
     ping: async (): Promise<AxiosResponse<ApiResponse<PingResponse>>> => await instance.get<ApiResponse<PingResponse>>('ping'),
   },
   auth: {
-    login: async (email: string, password: string): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('login', { email, password }),
+    login: async (email: string, password: string, browser_identifier: string): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('login', { email, password, browser_identifier }),
     status: async (): Promise<AxiosResponse<TokenStatusResponse>> => await instance.get<TokenStatusResponse>('token/status'),
+    refresh: async (browser_identifier: string, refresh_token: string): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('token/refresh', { browser_identifier, refresh_token }),
   },
 }
