@@ -1,22 +1,48 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
     "jsx": "preserve",
+    
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    
+    "noEmit": true,
+    "isolatedModules": true,
+    
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "useDefineForClassFields": true,
+    
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["src/*"],
+      "src/*": ["src/*"],
+      "@assets/*": ["src/assets/*"]
+    },
+    
     "types": ["chrome", "unplugin-vue-router/client", "vite/client"],
+    
+    "composite": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "./typed-router.d.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/**/*.d.ts",
+    "vite.config.ts",
+    "typed-router.d.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

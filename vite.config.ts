@@ -1,8 +1,7 @@
 import fs from "node:fs"
 import { defineConfig, type UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { relative, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { resolve, relative, dirname } from 'path'
 import Components from 'unplugin-vue-components/vite'
 import VueRouter from 'unplugin-vue-router/vite'
 
@@ -52,17 +51,17 @@ export default function baseConfig(): UserConfig {
         transformIndexHtml(html, { path }) {
           return html.replace(
             /"\/assets\//g,
-              `"${relative(dirname(path), "/assets")}/`,
+            `"${relative(dirname(path), "/assets")}/`,
           )
         },
       },
     ],
     resolve: {
       alias: {
-        "~": fileURLToPath(new URL(".", import.meta.url)),
-        "@": fileURLToPath(new URL("src", import.meta.url)),
-        src: fileURLToPath(new URL("src", import.meta.url)),
-        "@assets": fileURLToPath(new URL("src/assets", import.meta.url)),
+        "~": resolve(__dirname, "."),
+        "@": resolve(__dirname, "src"),
+        src: resolve(__dirname, "src"),
+        "@assets": resolve(__dirname, "src/assets"),
       },
     },
   })

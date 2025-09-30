@@ -13,5 +13,5 @@ export default defineManifest({
     type: "module",
   },
   host_permissions: ["<all_urls>"],
-  permissions: ["storage", "tabs", "background"],
+  permissions: ["bookmarks", "storage", "tabs", "background"],
 })
