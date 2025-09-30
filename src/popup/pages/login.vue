@@ -27,8 +27,8 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getKey, removeKey } from '../../helpers/storage'
-import { useAuth } from '../../helpers/auth'
+import { getKey, removeKey } from '@/helpers/storage'
+import { useAuth } from '@/helpers/auth'
 
 const router = useRouter()
 const auth = useAuth()
@@ -60,11 +60,13 @@ const login = async () => {
   data.loading = true
 
   try {
-    await auth.login(data.fields)
+    const response = await auth.login(data.fields)
+    console.log(response)
     await router.push({ path: '/wait' })
   } catch (err) {
-    const errors = JSON.parse((err as Error).message)
-    data.errors = errors
+    console.log(err)
+    //const errors = JSON.parse((err as Error).message)
+    //data.errors = errors
   } finally {
     data.loading = false
   }

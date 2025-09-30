@@ -1,7 +1,7 @@
-import { createApiInstance } from './index'
-import type { ApiResponse, PingResponse, TokenStatusResponse, LoginResponse } from './types'
+import { createApiInstance } from '@/api/index'
+import type { ApiResponse, PingResponse, TokenStatusResponse, LoginRequest, LoginResponse, RefreshTokenRequest } from '@/api/types'
 import { AxiosInstance, AxiosResponse } from 'axios'
-import { setKey } from '../helpers/storage'
+import { setKey } from '@/helpers/storage'
 
 let instance: AxiosInstance = createApiInstance()
 
@@ -17,9 +17,12 @@ type ApiType = {
     ping: () => Promise<AxiosResponse<ApiResponse<PingResponse>>>;
   };
   auth: {
-    login: (email: string, password: string, browser_identifier: string) => Promise<AxiosResponse<LoginResponse>>;
+    login: (data: LoginRequest) => Promise<AxiosResponse<LoginResponse>>;
     status: () => Promise<AxiosResponse<TokenStatusResponse>>;
-    refresh: (browser_identifier: string, refresh_token: string) => Promise<AxiosResponse<LoginResponse>>;
+    refresh: (data: RefreshTokenRequest) => Promise<AxiosResponse<LoginResponse>>;
+  };
+  bookmark: {
+    create: (data: any) => Promise<AxiosResponse>;
   };
 };
 
@@ -28,8 +31,11 @@ export const api: ApiType = {
     ping: async (): Promise<AxiosResponse<ApiResponse<PingResponse>>> => await instance.get<ApiResponse<PingResponse>>('ping'),
   },
   auth: {
-    login: async (email: string, password: string, browser_identifier: string): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('login', { email, password, browser_identifier }),
+    login: async (data: LoginRequest): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('login', data),
     status: async (): Promise<AxiosResponse<TokenStatusResponse>> => await instance.get<TokenStatusResponse>('token/status'),
-    refresh: async (browser_identifier: string, refresh_token: string): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('token/refresh', { browser_identifier, refresh_token }),
+    refresh: async (data: RefreshTokenRequest): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('token/refresh', data),
+  },
+  bookmark: {
+    create: async (data): Promise<AxiosResponse> => await instance.post('bookmark', data)
   },
 }

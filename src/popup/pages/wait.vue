@@ -1,26 +1,18 @@
 <template>
   <section class="p-4">
-    <p>Status: {{ status }}</p>
+    <Status :status="clientStatus" />
+    {{ accessToken }}
   </section>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { useAuth } from '../../helpers/auth'
+import { onMounted } from 'vue'
+import { useAuth } from '@/helpers/auth'
 
-const auth = useAuth()
+const {
+  fetchStatus,
+  clientStatus,
+} = useAuth()
 
-const status = ref<string>("")
-
-onMounted(async () => {
-  try {
-    const res = await auth.status()
-    console.log(res)
-    status.value = res.data.status
-  } catch (err) {
-    console.log(err)
-    const error = JSON.parse(err.message)
-    status.value = error.status
-  }
-})
+onMounted(async () => await fetchStatus())
 </script>

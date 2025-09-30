@@ -1,78 +1,38 @@
+import type { LoginCredentials, User } from '@/api/types'
+import authService from '@/services/authService'
 import { computed, ref } from 'vue'
-import { api } from '../api/endpoints'
-import { getKey, setKey } from '../helpers/storage'
-
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
+import axios from 'axios';
 
 export function useAuth() {
-  const user = ref(null)
+  const user = ref<User | null>(null)
   const accessToken = ref<string | null>(null)
-  // const refreshToken = ref(null)
-  // const extKey = ref(null)
-  // const isRefreshing = ref(false)
-
+  const clientStatus = ref<string>("pending")
   const isAuthenticated = computed(() => !!accessToken.value && !!user.value)
 
-  const login = async (fields: LoginCredentials) => {
-    const browserIdentifier = await getKey('identifier')
+  const login = async (data: LoginCredentials) => {
+    const { access_token, user: userData } = await authService.login(data)
 
-    try {
-      const res = await api.auth.login(
-        fields.email,
-        fields.password,
-        browserIdentifier,
-      )
-
-      const { access_token, refresh_token } = res.data;
-      await setKey('authToken', access_token)
-      await setKey('refreshToken', refresh_token)
-
-      accessToken.value = access_token;
-    } catch (err) {
-      const errorsData = err.response.data.errors
-      const errorsMap: Record<string, string> = {}
-
-      if (errorsData) {
-        Object.keys(errorsData).forEach(field => {
-          const fieldErrors = errorsData[field]
-          if (Array.isArray(fieldErrors)) {
-            fieldErrors.forEach(errorMsg => {
-              if (errorMsg) {
-                errorsMap[field] = errorMsg
-              }
-            })
-          }
-        })
-      }
-
-      throw new Error(JSON.stringify(errorsMap));
-    }
+    user.value = userData;
+    accessToken.value = access_token;
   }
 
-  const status = async () => {
+  const fetchStatus = async () => {
     try {
-      const res = await api.auth.status()
-      return res
+      const { data: { status } } = await authService.fetchStatus()
+      clientStatus.value = status
     } catch (err) {
-      const status = err.response.status
-
-      if (status === 401) {
-        // handle refresh token
-        throw new Error(JSON.stringify({ status: 'unauthorized' }))
-      }
-
-      if (status === 403) {
-        throw new Error(JSON.stringify(err.response.data))
+      if (axios.isAxiosError(err)) {
+        const { status } = err.response?.data
+        clientStatus.value = status || "pending"
       }
     }
   }
 
   return {
-    login,
-    status,
+    user,
+    clientStatus,
     isAuthenticated,
+    login,
+    fetchStatus,
   }
 }
