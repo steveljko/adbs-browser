@@ -1,12 +1,13 @@
-import type { LoginCredentials, LoginResponse, RefreshTokenRequest } from '@/api/types'
-import { getKey, setKey } from '@/helpers/storage'
+import type { LoginCredentials, LoginResponse } from '@/api/types'
+import { getKey, setKey, removeKey } from '@/helpers/storage'
 import { AxiosError, AxiosResponse } from 'axios'
 import { api } from '@/api/endpoints'
+import { v4 as uuidv4 } from 'uuid'
 
 interface AuthService {
   login: (data: LoginCredentials) => Promise<LoginResponse>;
   fetchStatus: () => Promise<AxiosResponse>;
-  refreshToken: (data: RefreshTokenRequest) => Promise<AxiosResponse<LoginResponse>>;
+  refreshToken: () => Promise<AxiosResponse<LoginResponse>>;
 }
 
 export const authService: AuthService = {
@@ -52,8 +53,36 @@ export const authService: AuthService = {
     return await api.auth.status()
   },
 
-  refreshToken: async (data: RefreshTokenRequest) => {
-    return await api.auth.refresh(data)
+  refreshToken: async () => {
+    try {
+      const refreshToken = await getKey('refreshToken')
+      if (!refreshToken) {
+        throw new Error('No refresh token available')
+      }
+
+      const browserIdentifier = await getKey('identifier')
+      if (!browserIdentifier) {
+        throw new Error('Browser identifier not found')
+      }
+
+      const response = await api.auth.refresh({ browser_identifier: browserIdentifier, refresh_token: refreshToken })
+      const { access_token, refresh_token: newRefreshToken } = response.data
+
+      await setKey('authToken', access_token)
+      if (newRefreshToken) {
+        await setKey('refreshToken', newRefreshToken)
+      }
+
+      return response
+    } catch (error) {
+      await removeKey('authToken')
+      await removeKey('refreshToken')
+
+      await removeKey('identifier')
+      await setKey('identifier', uuidv4()) // get new identifier
+
+      return Promise.reject(error)
+    }
   }
 }
 

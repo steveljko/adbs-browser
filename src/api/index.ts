@@ -1,24 +1,26 @@
-import { getKey, setKey, removeKey } from '.././helpers/storage'
+import { getKey } from '@/helpers/storage'
 import axios, { AxiosInstance } from 'axios'
-import { api } from './endpoints'
+import authService from '../services/authService'
 import { useRouter } from 'vue-router'
 
-const router = useRouter()
+let isRefreshing: boolean = false
+let failedQueue: Array<{
+  resolve: (token: string) => void
+  reject: (error: any) => void
+}> = []
 
-let isRefreshing = false;
-let failedQueue = [];
-
-const processQueue = (error, token = null) => {
+const processQueue = (error: any, token: string | null = null): void => {
   failedQueue.forEach(prom => {
     if (error) {
-      prom.reject(error);
+      prom.reject(error)
     } else {
-      prom.resolve(token);
+      prom.resolve(token!)
     }
-  });
+  })
+  failedQueue = []
+}
 
-  failedQueue = [];
-};
+const router = useRouter()
 
 export const createApiInstance = (): AxiosInstance => {
   const instance = axios.create({
@@ -56,51 +58,26 @@ export const createApiInstance = (): AxiosInstance => {
 
       if (error.response && error.response.status === 401 && !originalRequest._retry) {
         if (isRefreshing) {
-          return new Promise((resolve, reject) => {
-            failedQueue.push({ resolve, reject })
-          }).then(token => {
-            originalRequest.headers.Authorization = `Bearer ${token}`
-            return instance(originalRequest)
-          }).catch(err => {
-            return Promise.reject(err)
-          });
+          return new Promise((resolve, reject) => failedQueue.push({ resolve, reject }))
+            .then(token => {
+              originalRequest.headers.Authorization = `Bearer ${token}`
+              return instance(originalRequest)
+            }).catch(err => Promise.reject(err))
         }
 
         originalRequest._retry = true
         isRefreshing = true
 
         try {
-          const refreshToken = await getKey('refreshToken')
-          const browserIdentifier = await getKey('identifier')
-
-          if (!refreshToken) {
-            throw new Error('No refresh token available')
-          }
-
-          const response = await api.auth.refresh(browserIdentifier, refreshToken)
-          const { access_token, refresh_token: newRefreshToken } = response.data
-
-          await setKey('authToken', access_token)
-          if (newRefreshToken) {
-            await setKey('refreshToken', newRefreshToken)
-          }
-
+          const { data: { access_token } } = await authService.refreshToken()
           instance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
-
           processQueue(null, access_token)
-
           originalRequest.headers.Authorization = `Bearer ${access_token}`
           return instance(originalRequest)
-        } catch (error) {
-          console.log(error.response.data)
-          processQueue(error, null)
-
-          await removeKey('authToken')
-          await removeKey('refreshToken')
-
-          router.push({ path: '/login' })
-
-          return Promise.reject(error)
+        } catch (err) {
+          processQueue(err, null)
+          await router.push({ path: '/login' })
+          return Promise.reject(err)
         } finally {
           isRefreshing = false
         }
