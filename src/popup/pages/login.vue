@@ -62,7 +62,7 @@ const login = async () => {
   try {
     const response = await auth.login(data.fields)
     console.log(response)
-    await router.push({ path: '/wait' })
+    await router.push({ path: '/default' })
   } catch (err) {
     console.log(err)
     //const errors = JSON.parse((err as Error).message)

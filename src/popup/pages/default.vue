@@ -1,20 +1,31 @@
 <template>
   <section class="p-4">
-    <Status :status="clientStatus" />
+    <div class="p-2 border border-gray-200 bg-gray-50 mb-4">
+      <div class="flex justify-between mb-1">
+        <span class="text-[14px]">Server</span>
+        <span class="text-[14px] font-medium">{{ serverUrl }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-[14px]">Status</span>
+        <Status :status="clientStatus" />
+      </div>
+    </div>
 
-    <button @click="red">Settings</button>
     <button class="w-full py-2 rounded text-white" :class="{ 'bg-green-500': !isSaved, 'bg-yellow-500': isSaved }"
-      @click="redSave">
+      @click="save">
       {{ !isSaved ? 'Add Current Page' : 'Update Bookmark' }}
     </button>
   </section>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { useAuth } from '@/helpers/auth'
 import { useBookmark } from '@/helpers/bookmark'
+import { getKey } from '@/helpers/storage'
+import { useAuth } from '@/helpers/auth'
 import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+
+const serverUrl = ref<string>("")
 
 const {
   fetchStatus,
@@ -25,10 +36,10 @@ const { isSaved } = useBookmark()
 
 const router = useRouter()
 
-const red = async () => await router.push({ path: '/settings' })
-const redSave = async () => await router.push({ path: '/save' })
+const save = async () => await router.push({ path: '/save' })
 
 onMounted(async () => {
+  serverUrl.value = (await getKey('serverUrl')).replace(/^https?:\/\//i, '')
   await fetchStatus()
 })
 </script>
