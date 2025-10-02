@@ -23,6 +23,7 @@ type ApiType = {
   };
   bookmark: {
     create: (data: any) => Promise<AxiosResponse>;
+    search: (url: string) => Promise<AxiosResponse>;
   };
 };
 
@@ -36,6 +37,7 @@ export const api: ApiType = {
     refresh: async (data: RefreshTokenRequest): Promise<AxiosResponse<LoginResponse>> => await instance.post<LoginResponse>('token/refresh', data),
   },
   bookmark: {
-    create: async (data): Promise<AxiosResponse> => await instance.post('bookmark', data)
+    create: async (data): Promise<AxiosResponse> => await instance.post('bookmark', data),
+    search: async (url: string): Promise<AxiosResponse> => await instance.post('bookmark/search', url),
   },
 }
