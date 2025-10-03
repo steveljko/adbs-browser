@@ -23,6 +23,7 @@ type ApiType = {
   };
   bookmark: {
     create: (data: any) => Promise<AxiosResponse>;
+    update: (id: number, data: any) => Promise<AxiosResponse>;
     search: (url: string) => Promise<AxiosResponse>;
   };
 };
@@ -38,6 +39,7 @@ export const api: ApiType = {
   },
   bookmark: {
     create: async (data): Promise<AxiosResponse> => await instance.post('bookmark', data),
+    update: async (id, data): Promise<AxiosResponse> => await instance.patch(`bookmark/${id}`, data),
     search: async (url: string): Promise<AxiosResponse> => await instance.post('bookmark/search', url),
   },
 }
