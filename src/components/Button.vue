@@ -6,6 +6,7 @@ interface Props {
   loading?: boolean
   variant?: 'primary' | 'secondary' | 'danger'
   size?: 'sm' | 'md' | 'lg'
+  full?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -20,7 +21,7 @@ const emit = defineEmits<{click: []}>()
 const isLoading = ref(false)
 
 const buttonClasses = computed(() => {
-  const base = 'w-full font-medium rounded-md transition duration-100 ease-in-out flex items-center justify-center'
+  const base = 'font-medium rounded-md transition duration-100 ease-in-out flex items-center justify-center'
   
   const variants = {
     primary: 'bg-orange-500 hover:bg-orange-500 text-white',
@@ -35,11 +36,14 @@ const buttonClasses = computed(() => {
   }
   
   const disabledClasses = 'opacity-50 cursor-not-allowed'
+
+  const isFull = props.full ? 'w-full' : ''
   
   return [
     base,
     variants[props.variant],
     sizes[props.size],
+    isFull,
     (props.disabled || props.loading || isLoading.value) && disabledClasses
   ].filter(Boolean).join(' ')
 })
