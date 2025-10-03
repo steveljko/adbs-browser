@@ -11,9 +11,9 @@
       </div>
     </div>
 
-    <button class="w-full py-2 rounded text-white" :class="{ 'bg-green-500': !isSaved, 'bg-yellow-500': isSaved }"
+    <button class="w-full py-2 bg-green-500 rounded text-white"
       @click="save">
-      {{ !isSaved ? 'Add Current Page' : 'Update Bookmark' }}
+      Add Current Page
     </button>
   </section>
 </template>
@@ -25,16 +25,14 @@ import { useAuth } from '@/helpers/auth'
 import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 
+const router = useRouter()
+
 const serverUrl = ref<string>("")
 
 const {
   fetchStatus,
   clientStatus,
 } = useAuth()
-
-const { isSaved } = useBookmark()
-
-const router = useRouter()
 
 const save = async () => await router.push({ path: '/save' })
 

@@ -3,11 +3,8 @@
     <div class="mb-4">
       <label class="mb-3 block text-sm font-medium text-gray-500">Enter Server URL</label>
       <input
-          class="block text-md w-full rounded-md border border-gray-300 px-3 py-2 mb-2 focus:border-orange-500 focus:outline-none"
-          v-model="serverUrl"
-          placeholder="Server URL"
-          @keydown.enter="checkConn"
-        />
+        class="block text-md w-full rounded-md border border-gray-300 px-3 py-2 mb-2 focus:border-orange-500 focus:outline-none"
+        v-model="serverUrl" placeholder="Server URL" @keydown.enter="checkConn" />
       <span class="block text-sm text-red-500" v-if="message">{{ message }}</span>
     </div>
     <Button @click="checkConn">Connect</Button>
@@ -17,8 +14,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
-import { getKey, setKey } from '../../helpers/storage'
-import { api, setUrl } from '../../api/endpoints'
+import { getKey, setKey } from '@/helpers/storage'
+import { api, setUrl } from '@/api/endpoints'
 
 const router = useRouter()
 
@@ -28,7 +25,7 @@ const message = ref<string>('')
 onMounted(async () => {
   const token = await getKey("authToken")
   if (token) {
-    await router.push({ path: '/wait' })
+    await router.push({ path: '/default' })
     return
   }
 
