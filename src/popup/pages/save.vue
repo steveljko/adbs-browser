@@ -9,21 +9,9 @@
         Back
       </Button>
     </div>
-    <FormGroup
-      v-model="siteData.title"
-      label="Page Title"
-      name="title"
-    />
-    <Tags
-      v-model="siteData.tags"
-      label="Tags"
-    />
-    <Button
-      full
-      @click="save"
-    >
-      Save Bookmark
-    </Button>
+    <FormGroup v-model="siteData.title" label="Page Title" name="title" />
+    <Tags v-model="siteData.tags" label="Tags" />
+    <Button full @click="save"> Save Bookmark </Button>
   </div>
 </template>
 

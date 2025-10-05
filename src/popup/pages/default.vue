@@ -11,10 +11,7 @@
       </div>
     </div>
 
-    <button
-      class="w-full py-2 bg-green-500 rounded text-white"
-      @click="save"
-    >
+    <button class="w-full py-2 bg-green-500 rounded text-white" @click="save">
       Add Current Page
     </button>
   </section>

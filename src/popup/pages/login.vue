@@ -1,10 +1,9 @@
 <template>
   <section class="p-4">
     <div class="mb-4">
-      <label
-        for="email"
-        class="block text-sm font-medium text-gray-700 mb-2"
-      >Email Address</label>
+      <label for="email" class="block text-sm font-medium text-gray-700 mb-2"
+        >Email Address</label
+      >
       <input
         id="email"
         v-model="data.fields.email"
@@ -12,17 +11,16 @@
         placeholder="your@email.com"
         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         @keydown="data.errors.email = ''"
-      >
+      />
       <span class="block text-sm text-red-600 mt-2">{{
         data.errors.email
       }}</span>
     </div>
 
     <div class="mb-6">
-      <label
-        for="password"
-        class="block text-sm font-medium text-gray-700 mb-2"
-      >Password</label>
+      <label for="password" class="block text-sm font-medium text-gray-700 mb-2"
+        >Password</label
+      >
       <input
         id="password"
         v-model="data.fields.password"
@@ -30,29 +28,23 @@
         placeholder="Enter your password"
         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         @keydown="data.errors.password = ''"
-      >
+      />
       <span class="block text-sm text-red-600 mt-2">{{
         data.errors.password
       }}</span>
     </div>
 
-    <Button
-      class="mb-2"
-      :loading="data.loading"
-      @click="login"
-    >
+    <Button class="mb-2" :loading="data.loading" @click="login">
       Sign In
     </Button>
 
-    <Button
-      class="mb-2"
-      variant="secondary"
-      @click="back"
-    >
+    <Button class="mb-2" variant="secondary" @click="back">
       Back to Server Config
     </Button>
 
-    <span class="block text-sm text-gray-600 text-center">Server URL is {{ serverUrl }}</span>
+    <span class="block text-sm text-gray-600 text-center"
+      >Server URL is {{ serverUrl }}</span
+    >
   </section>
 </template>
 

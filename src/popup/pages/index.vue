@@ -1,23 +1,20 @@
 <template>
   <section class="p-4">
     <div class="mb-4">
-      <label class="mb-3 block text-sm font-medium text-gray-500">Enter Server URL</label>
+      <label class="mb-3 block text-sm font-medium text-gray-500"
+        >Enter Server URL</label
+      >
       <input
         v-model="serverUrl"
         class="block text-md w-full rounded-md border border-gray-300 px-3 py-2 mb-2 focus:border-orange-500 focus:outline-none"
         placeholder="Server URL"
         @keydown.enter="checkConn"
-      >
-      <span
-        v-if="message"
-        class="block text-sm text-red-500"
-      >{{
+      />
+      <span v-if="message" class="block text-sm text-red-500">{{
         message
       }}</span>
     </div>
-    <Button @click="checkConn">
-      Connect
-    </Button>
+    <Button @click="checkConn"> Connect </Button>
   </section>
 </template>
 

@@ -9,7 +9,7 @@
         placeholder="Add a tag..."
         class="flex-1 text-md px-2 py-1.5 border border-gray-200 rounded"
         @keydown.enter.prevent="addTag"
-      >
+      />
       <button
         type="button"
         class="px-3 py-1.5 bg-orange-500 text-white rounded hover:bg-orange-600"
@@ -36,10 +36,7 @@
       </span>
     </div>
 
-    <p
-      v-if="tags.length === 0"
-      class="text-sm text-gray-400 mt-2"
-    >
+    <p v-if="tags.length === 0" class="text-sm text-gray-400 mt-2">
       No tags added yet
     </p>
   </div>
