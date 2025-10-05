@@ -1,11 +1,16 @@
 <template>
   <div>
-    <FormGroup type="checkbox" label="Automatically save bookmarks" v-model="autoSave" name="save" />
+    <FormGroup
+      v-model="autoSave"
+      type="checkbox"
+      label="Automatically save bookmarks"
+      name="save"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const autoSave = ref<boolean>(false)
+const autoSave = ref<boolean>(false);
 </script>

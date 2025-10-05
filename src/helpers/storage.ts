@@ -15,7 +15,10 @@ export async function getKey(key: StorageKeys): Promise<string | null> {
   return typeof value === "string" ? value : null;
 }
 
-export async function setKey(key: StorageKeys, value: string): Promise<boolean> {
+export async function setKey(
+  key: StorageKeys,
+  value: string,
+): Promise<boolean> {
   await browser.storage.local.set({ [key]: value });
   return true;
 }

@@ -11,33 +11,31 @@
       </div>
     </div>
 
-    <button class="w-full py-2 bg-green-500 rounded text-white"
-      @click="save">
+    <button
+      class="w-full py-2 bg-green-500 rounded text-white"
+      @click="save"
+    >
       Add Current Page
     </button>
   </section>
 </template>
 
 <script lang="ts" setup>
-import { useBookmark } from '@/helpers/bookmark'
-import { getKey } from '@/helpers/storage'
-import { useAuth } from '@/helpers/auth'
-import { useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { getKey } from "@/helpers/storage";
+import { useAuth } from "@/helpers/auth";
+import { useRouter } from "vue-router";
+import { onMounted, ref } from "vue";
 
-const router = useRouter()
+const router = useRouter();
 
-const serverUrl = ref<string>("")
+const serverUrl = ref<string>("");
 
-const {
-  fetchStatus,
-  clientStatus,
-} = useAuth()
+const { fetchStatus, clientStatus } = useAuth();
 
-const save = async () => await router.push({ path: '/save' })
+const save = async () => await router.push({ path: "/save" });
 
 onMounted(async () => {
-  serverUrl.value = (await getKey('serverUrl')).replace(/^https?:\/\//i, '')
-  await fetchStatus()
-})
+  serverUrl.value = (await getKey("serverUrl")).replace(/^https?:\/\//i, "");
+  await fetchStatus();
+});
 </script>

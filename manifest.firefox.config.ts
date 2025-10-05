@@ -1,5 +1,5 @@
-import { defineManifest } from "@crxjs/vite-plugin"
-import baseManifest from "./manifest.config"
+import { defineManifest } from "@crxjs/vite-plugin";
+import baseManifest from "./manifest.config";
 
 // @ts-expect-error ManifestConfig provides all required fields
 export default defineManifest((env) => ({
@@ -19,4 +19,4 @@ export default defineManifest((env) => ({
       (permission) => permission !== "background",
     ),
   ],
-}))
+}));

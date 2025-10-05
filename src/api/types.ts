@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 export interface ApiResponse<T = any> {
   data: T;
   status: number;
@@ -8,7 +9,12 @@ export interface PingResponse {
   status: string;
 }
 
-export type TokenStatus = 'active' | 'inactive' | 'pending' | 'revoked' | 'suspended';
+export type TokenStatus =
+  | "active"
+  | "inactive"
+  | "pending"
+  | "revoked"
+  | "suspended";
 
 export interface TokenStatusResponse {
   status: TokenStatus;
@@ -31,7 +37,7 @@ export interface User {
 export interface LoginResponse {
   access_token: string;
   refresh_token: string;
-  user: User,
+  user: User;
   expires_in: number;
 }
 
