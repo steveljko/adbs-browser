@@ -1,4 +1,4 @@
-import type { LoginCredentials, User } from "@/api/types";
+import type { LoginCredentials, TokenStatus, User } from "@/api/types";
 import authService from "@/services/authService";
 import { computed, ref } from "vue";
 import axios from "axios";
@@ -6,7 +6,7 @@ import axios from "axios";
 export function useAuth() {
   const user = ref<User | null>(null);
   const accessToken = ref<string | null>(null);
-  const clientStatus = ref<string>("pending");
+  const clientStatus = ref<TokenStatus>("loading");
   const isAuthenticated = computed(() => !!accessToken.value && !!user.value);
 
   const login = async (data: LoginCredentials) => {
@@ -25,7 +25,7 @@ export function useAuth() {
     } catch (err) {
       if (axios.isAxiosError(err)) {
         const status = err.response?.data?.status;
-        clientStatus.value = status || "pending";
+        clientStatus.value = status || "loading";
       }
     }
   };

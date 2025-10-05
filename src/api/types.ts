@@ -14,7 +14,8 @@ export type TokenStatus =
   | "inactive"
   | "pending"
   | "revoked"
-  | "suspended";
+  | "suspended"
+  | "loading";
 
 export interface TokenStatusResponse {
   status: TokenStatus;
