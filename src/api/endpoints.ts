@@ -5,38 +5,38 @@ import type {
   LoginRequest,
   LoginResponse,
   RefreshTokenRequest,
-} from "@/api/types";
-import { setKey } from "@/helpers/storage";
-import { createApiInstance } from "@/api/index";
-import { AxiosInstance, AxiosResponse } from "axios";
-import { BookmarkData } from "@/services/bookmarkService";
+} from "@/api/types"
+import { setKey } from "@/helpers/storage"
+import { createApiInstance } from "@/api/index"
+import { AxiosInstance, AxiosResponse } from "axios"
+import { BookmarkData } from "@/services/bookmarkService"
 
-const instance: AxiosInstance = createApiInstance();
+const instance: AxiosInstance = createApiInstance()
 
 export const setUrl = (url: string) => {
-  const baseUrl: string = url.startsWith("http") ? url : `http://${url}`;
-  setKey("serverUrl", baseUrl);
+  const baseUrl: string = url.startsWith("http") ? url : `http://${url}`
+  setKey("serverUrl", baseUrl)
 
-  instance.defaults.baseURL = `${baseUrl}/api`;
-};
+  instance.defaults.baseURL = `${baseUrl}/api`
+}
 
 type ApiType = {
   server: {
-    ping: () => Promise<AxiosResponse<ApiResponse<PingResponse>>>;
-  };
+    ping: () => Promise<AxiosResponse<ApiResponse<PingResponse>>>
+  }
   auth: {
-    login: (data: LoginRequest) => Promise<AxiosResponse<LoginResponse>>;
-    status: () => Promise<AxiosResponse<TokenStatusResponse>>;
+    login: (data: LoginRequest) => Promise<AxiosResponse<LoginResponse>>
+    status: () => Promise<AxiosResponse<TokenStatusResponse>>
     refresh: (
       data: RefreshTokenRequest,
-    ) => Promise<AxiosResponse<LoginResponse>>;
-  };
+    ) => Promise<AxiosResponse<LoginResponse>>
+  }
   bookmark: {
-    create: (data: BookmarkData) => Promise<AxiosResponse>;
-    update: (id: number, data: BookmarkData) => Promise<AxiosResponse>;
-    search: (url: string) => Promise<AxiosResponse>;
-  };
-};
+    create: (data: BookmarkData) => Promise<AxiosResponse>
+    update: (id: number, data: BookmarkData) => Promise<AxiosResponse>
+    search: (url: string) => Promise<AxiosResponse>
+  }
+}
 
 export const api: ApiType = {
   server: {
@@ -61,4 +61,4 @@ export const api: ApiType = {
     search: async (url: string): Promise<AxiosResponse> =>
       await instance.post("bookmark/search", url),
   },
-};
+}

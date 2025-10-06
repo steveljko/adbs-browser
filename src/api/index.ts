@@ -1,26 +1,26 @@
-import { useRouter } from "vue-router";
-import { getKey } from "@/helpers/storage";
-import authService from "@/services/authService";
-import axios, { AxiosError, AxiosInstance } from "axios";
+import { useRouter } from "vue-router"
+import { getKey } from "@/helpers/storage"
+import authService from "@/services/authService"
+import axios, { AxiosError, AxiosInstance } from "axios"
 
-let isRefreshing: boolean = false;
+let isRefreshing: boolean = false
 let failedQueue: Array<{
-  resolve: (token: string) => void;
-  reject: (error: AxiosError) => void;
-}> = [];
+  resolve: (token: string) => void
+  reject: (error: AxiosError) => void
+}> = []
 
 const processQueue = (error: AxiosError, token: string | null = null): void => {
   failedQueue.forEach((prom) => {
     if (error) {
-      prom.reject(error);
+      prom.reject(error)
     } else {
-      prom.resolve(token!);
+      prom.resolve(token!)
     }
-  });
-  failedQueue = [];
-};
+  })
+  failedQueue = []
+}
 
-const router = useRouter();
+const router = useRouter()
 
 export const createApiInstance = (): AxiosInstance => {
   const instance = axios.create({
@@ -28,32 +28,32 @@ export const createApiInstance = (): AxiosInstance => {
     headers: {
       "Content-Type": "application/json",
     },
-  });
+  })
 
   instance.interceptors.request.use(async (config) => {
-    const baseUrl: string | null = await getKey("serverUrl");
+    const baseUrl: string | null = await getKey("serverUrl")
     if (baseUrl) {
       const url: string = baseUrl.startsWith("http")
         ? baseUrl
-        : `http://${baseUrl}`;
+        : `http://${baseUrl}`
 
-      config.baseURL = `${url}/api`;
+      config.baseURL = `${url}/api`
     }
 
-    config.headers["X-Addon-Version"] = "0.0.0";
+    config.headers["X-Addon-Version"] = "0.0.0"
 
-    const authToken = await getKey("authToken");
-    if (authToken) config.headers.Authorization = `Bearer ${authToken}`;
+    const authToken = await getKey("authToken")
+    if (authToken) config.headers.Authorization = `Bearer ${authToken}`
 
-    return config;
-  });
+    return config
+  })
 
   instance.interceptors.response.use(
     (response) => {
-      return response;
+      return response
     },
     async (error) => {
-      const originalRequest = error.config;
+      const originalRequest = error.config
 
       if (
         error.response &&
@@ -65,36 +65,36 @@ export const createApiInstance = (): AxiosInstance => {
             failedQueue.push({ resolve, reject }),
           )
             .then((token) => {
-              originalRequest.headers.Authorization = `Bearer ${token}`;
-              return instance(originalRequest);
+              originalRequest.headers.Authorization = `Bearer ${token}`
+              return instance(originalRequest)
             })
-            .catch((err) => Promise.reject(err));
+            .catch((err) => Promise.reject(err))
         }
 
-        originalRequest._retry = true;
-        isRefreshing = true;
+        originalRequest._retry = true
+        isRefreshing = true
 
         try {
           const {
             data: { access_token },
-          } = await authService.refreshToken();
+          } = await authService.refreshToken()
           instance.defaults.headers.common["Authorization"] =
-            `Bearer ${access_token}`;
-          processQueue(null, access_token);
-          originalRequest.headers.Authorization = `Bearer ${access_token}`;
-          return instance(originalRequest);
+            `Bearer ${access_token}`
+          processQueue(null, access_token)
+          originalRequest.headers.Authorization = `Bearer ${access_token}`
+          return instance(originalRequest)
         } catch (err) {
-          processQueue(err, null);
-          await router.push({ path: "/login" });
-          return Promise.reject(err);
+          processQueue(err, null)
+          await router.push({ path: "/login" })
+          return Promise.reject(err)
         } finally {
-          isRefreshing = false;
+          isRefreshing = false
         }
       }
 
-      return Promise.reject(error);
+      return Promise.reject(error)
     },
-  );
+  )
 
-  return instance;
-};
+  return instance
+}

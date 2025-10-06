@@ -1,12 +1,12 @@
-import fs from "node:fs";
-import { defineConfig, type UserConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import { resolve, relative, dirname } from "path";
-import Components from "unplugin-vue-components/vite";
-import VueRouter from "unplugin-vue-router/vite";
-import eslintPlugin from "vite-plugin-eslint";
+import fs from "node:fs"
+import { defineConfig, type UserConfig } from "vite"
+import vue from "@vitejs/plugin-vue"
+import { resolve, relative, dirname } from "path"
+import Components from "unplugin-vue-components/vite"
+import VueRouter from "unplugin-vue-router/vite"
+import eslintPlugin from "vite-plugin-eslint"
 
-const isDev = process.env.NODE_ENV !== "production";
+const isDev = process.env.NODE_ENV !== "production"
 
 export default function baseConfig(): UserConfig {
   return defineConfig({
@@ -23,9 +23,9 @@ export default function baseConfig(): UserConfig {
       {
         name: "ensure-output-dir",
         buildStart() {
-          ["dist/chrome", "dist/firefox"].forEach((dir) => {
-            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-          });
+          ;["dist/chrome", "dist/firefox"].forEach((dir) => {
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+          })
         },
       },
 
@@ -53,7 +53,7 @@ export default function baseConfig(): UserConfig {
           return html.replace(
             /"\/assets\//g,
             `"${relative(dirname(path), "/assets")}/`,
-          );
+          )
         },
       },
 
@@ -71,5 +71,5 @@ export default function baseConfig(): UserConfig {
         "@assets": resolve(__dirname, "src/assets"),
       },
     },
-  });
+  })
 }

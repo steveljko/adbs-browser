@@ -23,16 +23,16 @@
 </template>
 
 <script lang="ts" setup>
-import type { TokenStatus } from "@/api/types";
-import { computed } from "vue";
+import type { TokenStatus } from "@/api/types"
+import { computed } from "vue"
 
 interface Props {
-  status?: TokenStatus;
+  status?: TokenStatus
 }
 
-const props = withDefaults(defineProps<Props>(), { status: "loading" });
+const props = withDefaults(defineProps<Props>(), { status: "loading" })
 
-const isLoading = computed(() => props.status === "loading");
+const isLoading = computed(() => props.status === "loading")
 
 const statusClasses = computed(() => ({
   active: "bg-green-100 text-green-800 border border-green-200",
@@ -42,7 +42,7 @@ const statusClasses = computed(() => ({
   suspended: "bg-orange-100 text-orange-800 border border-orange-200",
   loading: "bg-gray-100 text-gray-500 border border-gray-200",
   default: "bg-gray-100 text-gray-800 border border-gray-200",
-}));
+}))
 
 const dotClasses = computed(() => ({
   active: "bg-green-400",
@@ -52,9 +52,9 @@ const dotClasses = computed(() => ({
   suspended: "bg-orange-400",
   loading: "bg-gray-400",
   default: "bg-gray-400",
-}));
+}))
 
 const text = computed(
   () => props.status.charAt(0).toUpperCase() + props.status.slice(1),
-);
+)
 </script>

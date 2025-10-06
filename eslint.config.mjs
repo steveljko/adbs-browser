@@ -1,13 +1,14 @@
-import js from "@eslint/js";
-import path from "node:path";
-import globals from "globals";
-import { fileURLToPath } from "node:url";
-import tseslint from "typescript-eslint";
-import vueParser from "vue-eslint-parser";
-import pluginVue from "eslint-plugin-vue";
+import js from "@eslint/js"
+import path from "node:path"
+import globals from "globals"
+import { fileURLToPath } from "node:url"
+import tseslint from "typescript-eslint"
+import vueParser from "vue-eslint-parser"
+import pluginVue from "eslint-plugin-vue"
+import prettierConfig from "eslint-config-prettier"
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default [
   {
@@ -16,6 +17,7 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...pluginVue.configs["flat/recommended"],
+  prettierConfig,
   {
     languageOptions: {
       globals: {
@@ -53,6 +55,12 @@ export default [
     files: ["**/pages/**/*.vue", "**/components/*.vue"],
     rules: {
       "vue/multi-word-component-names": "off",
+      // disable formatting rules that conflict with Prettier
+      "vue/max-attributes-per-line": "off",
+      "vue/singleline-html-element-content-newline": "off",
+      "vue/multiline-html-element-content-newline": "off",
+      "vue/html-indent": "off",
+      "vue/html-self-closing": "off",
     },
   },
-];
+]

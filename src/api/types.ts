@@ -1,12 +1,12 @@
 // eslint-disable-next-line
 export interface ApiResponse<T = any> {
-  data: T;
-  status: number;
-  message?: string;
+  data: T
+  status: number
+  message?: string
 }
 
 export interface PingResponse {
-  status: string;
+  status: string
 }
 
 export type TokenStatus =
@@ -15,34 +15,34 @@ export type TokenStatus =
   | "pending"
   | "revoked"
   | "suspended"
-  | "loading";
+  | "loading"
 
 export interface TokenStatusResponse {
-  status: TokenStatus;
+  status: TokenStatus
 }
 
 export interface LoginCredentials {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export interface LoginRequest extends LoginCredentials {
-  browser_identifier: string;
+  browser_identifier: string
 }
 
 export interface User {
-  name: string;
-  email: string;
+  name: string
+  email: string
 }
 
 export interface LoginResponse {
-  access_token: string;
-  refresh_token: string;
-  user: User;
-  expires_in: number;
+  access_token: string
+  refresh_token: string
+  user: User
+  expires_in: number
 }
 
 export interface RefreshTokenRequest {
-  browser_identifier: string;
-  refresh_token: string;
+  browser_identifier: string
+  refresh_token: string
 }

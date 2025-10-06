@@ -1,16 +1,16 @@
-import { api } from "@/api/endpoints";
-import axios, { AxiosResponse } from "axios";
+import { api } from "@/api/endpoints"
+import axios, { AxiosResponse } from "axios"
 
 export interface BookmarkData {
-  url?: string;
-  title?: string;
-  description?: string;
+  url?: string
+  title?: string
+  description?: string
 }
 
 export interface BookmarkService {
-  createBookmark: (data: BookmarkData) => Promise<AxiosResponse>;
-  updateBookmark: (id: number, data: BookmarkData) => Promise<AxiosResponse>;
-  findByUrl: (url: string) => Promise<AxiosResponse>;
+  createBookmark: (data: BookmarkData) => Promise<AxiosResponse>
+  updateBookmark: (id: number, data: BookmarkData) => Promise<AxiosResponse>
+  findByUrl: (url: string) => Promise<AxiosResponse>
 }
 
 export const bookmarkService: BookmarkService = {
@@ -21,21 +21,21 @@ export const bookmarkService: BookmarkService = {
 
   findByUrl: async (url: string) => {
     try {
-      const response = await api.bookmark.search({ url });
-      return response;
+      const response = await api.bookmark.search({ url })
+      return response
     } catch (err) {
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 404) {
-          return err.response;
+          return err.response
         }
 
         throw new Error(
           err.response?.data?.message || "Failed to check bookmark",
-        );
+        )
       }
-      throw err;
+      throw err
     }
   },
-};
+}
 
-export default bookmarkService;
+export default bookmarkService

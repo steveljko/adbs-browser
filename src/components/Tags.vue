@@ -36,45 +36,48 @@
       </span>
     </div>
 
-    <p v-if="tags.length === 0" class="text-sm text-gray-400 mt-2">
+    <p
+      v-if="tags.length === 0"
+      class="text-sm text-gray-400 mt-2"
+    >
       No tags added yet
     </p>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed } from "vue"
 
 interface Props {
-  label?: string;
-  modelValue?: string[];
+  label?: string
+  modelValue?: string[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
   label: "Tags",
   modelValue: () => [],
-});
+})
 
 const emit = defineEmits<{
-  "update:modelValue": [value: string[]];
-}>();
+  "update:modelValue": [value: string[]]
+}>()
 
-const inputValue = ref("");
+const inputValue = ref("")
 
 const tags = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
-});
+})
 
 const addTag = () => {
-  const tag = inputValue.value.trim();
+  const tag = inputValue.value.trim()
   if (tag && !tags.value.includes(tag)) {
-    tags.value = [...tags.value, tag];
-    inputValue.value = "";
+    tags.value = [...tags.value, tag]
+    inputValue.value = ""
   }
-};
+}
 
 const removeTag = (index: number) => {
-  tags.value = tags.value.filter((_, i) => i !== index);
-};
+  tags.value = tags.value.filter((_, i) => i !== index)
+}
 </script>

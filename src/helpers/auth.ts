@@ -1,34 +1,34 @@
-import type { LoginCredentials, TokenStatus, User } from "@/api/types";
-import authService from "@/services/authService";
-import { computed, ref } from "vue";
-import axios from "axios";
+import type { LoginCredentials, TokenStatus, User } from "@/api/types"
+import authService from "@/services/authService"
+import { computed, ref } from "vue"
+import axios from "axios"
 
 export function useAuth() {
-  const user = ref<User | null>(null);
-  const accessToken = ref<string | null>(null);
-  const clientStatus = ref<TokenStatus>("loading");
-  const isAuthenticated = computed(() => !!accessToken.value && !!user.value);
+  const user = ref<User | null>(null)
+  const accessToken = ref<string | null>(null)
+  const clientStatus = ref<TokenStatus>("loading")
+  const isAuthenticated = computed(() => !!accessToken.value && !!user.value)
 
   const login = async (data: LoginCredentials) => {
-    const { access_token, user: userData } = await authService.login(data);
+    const { access_token, user: userData } = await authService.login(data)
 
-    user.value = userData;
-    accessToken.value = access_token;
-  };
+    user.value = userData
+    accessToken.value = access_token
+  }
 
   const fetchStatus = async () => {
     try {
       const {
         data: { status },
-      } = await authService.fetchStatus();
-      clientStatus.value = status;
+      } = await authService.fetchStatus()
+      clientStatus.value = status
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        const status = err.response?.data?.status;
-        clientStatus.value = status || "loading";
+        const status = err.response?.data?.status
+        clientStatus.value = status || "loading"
       }
     }
-  };
+  }
 
   return {
     user,
@@ -36,5 +36,5 @@ export function useAuth() {
     isAuthenticated,
     login,
     fetchStatus,
-  };
+  }
 }

@@ -20,50 +20,62 @@
         Back
       </Button>
     </div>
-    <FormGroup v-model="siteData.title" label="Page Title" name="title" />
-    <Tags v-model="siteData.tags" label="Tags" />
-    <Button full @click="save"> Save Bookmark </Button>
+    <FormGroup
+      v-model="siteData.title"
+      label="Page Title"
+      name="title"
+    />
+    <Tags
+      v-model="siteData.tags"
+      label="Tags"
+    />
+    <Button
+      full
+      @click="save"
+    >
+      Save Bookmark
+    </Button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useBookmark } from "@/helpers/bookmark";
-import { reactive, ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { useTab } from "@/helpers/tab";
+import { useBookmark } from "@/helpers/bookmark"
+import { reactive, ref, onMounted } from "vue"
+import { useRouter } from "vue-router"
+import { useTab } from "@/helpers/tab"
 
-const router = useRouter();
-const tab = useTab();
+const router = useRouter()
+const tab = useTab()
 
-const isLoading = ref<boolean>(true);
+const isLoading = ref<boolean>(true)
 
-const { checkIfExists, createOrUpdateCurrent } = useBookmark();
+const { checkIfExists, createOrUpdateCurrent } = useBookmark()
 
 const siteData = reactive<{
-  title: string;
-  tags: string[];
+  title: string
+  tags: string[]
 }>({
   title: "",
   tags: [],
-});
+})
 
 onMounted(async () => {
-  const { title } = await tab.getCurrent();
-  const { exists, bookmark } = await checkIfExists();
+  const { title } = await tab.getCurrent()
+  const { exists, bookmark } = await checkIfExists()
 
   if (exists === true && bookmark) {
-    if (bookmark.title) siteData.title = bookmark.title;
-    if (bookmark.tags) siteData.tags = bookmark.tags.map((t: string) => t.name);
+    if (bookmark.title) siteData.title = bookmark.title
+    if (bookmark.tags) siteData.tags = bookmark.tags.map((t: string) => t.name)
   } else {
-    if (title) siteData.title = title;
+    if (title) siteData.title = title
   }
 
-  isLoading.value = false;
-});
+  isLoading.value = false
+})
 
 const save = async () => {
-  const res = await createOrUpdateCurrent(siteData);
+  const res = await createOrUpdateCurrent(siteData)
   if (res.status === 200 || res.status === 201)
-    await router.push({ path: "/default" });
-};
+    await router.push({ path: "/default" })
+}
 </script>
