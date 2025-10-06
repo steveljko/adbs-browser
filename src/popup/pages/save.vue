@@ -1,5 +1,16 @@
 <template>
   <div class="p-4">
+    <div
+      v-if="isLoading"
+      class="fixed inset-0 bg-white z-50 flex items-center justify-center"
+    >
+      <div class="text-center">
+        <div
+          class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"
+        />
+        <p class="mt-2 text-sm text-gray-600">Loading...</p>
+      </div>
+    </div>
     <div class="mb-2">
       <Button
         size="sm"
@@ -17,12 +28,14 @@
 
 <script lang="ts" setup>
 import { useBookmark } from "@/helpers/bookmark";
-import { reactive, onMounted } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useTab } from "@/helpers/tab";
 
 const router = useRouter();
 const tab = useTab();
+
+const isLoading = ref<boolean>(true);
 
 const { checkIfExists, createOrUpdateCurrent } = useBookmark();
 
@@ -44,14 +57,13 @@ onMounted(async () => {
   } else {
     if (title) siteData.title = title;
   }
+
+  isLoading.value = false;
 });
 
 const save = async () => {
-  try {
-    const res = await createOrUpdateCurrent(siteData);
-    if (res.status === 200) await router.push({ path: "/default" });
-  } catch (err) {
-    console.log(err);
-  }
+  const res = await createOrUpdateCurrent(siteData);
+  if (res.status === 200 || res.status === 201)
+    await router.push({ path: "/default" });
 };
 </script>

@@ -1,6 +1,6 @@
 import bookmarkService, { BookmarkData } from "@/services/bookmarkService";
 import tabService from "@/services/tabService";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import browser from "webextension-polyfill";
 
 export function useBookmark() {
@@ -27,7 +27,9 @@ export function useBookmark() {
     }
   };
 
-  const createOrUpdateCurrent = async (bookmarkData: BookmarkData) => {
+  const createOrUpdateCurrent = async (
+    bookmarkData: BookmarkData,
+  ): Promise<AxiosResponse> => {
     const { url } = await tabService.getCurrentTab();
     if (!url) {
       throw new Error("Current URL is not available — no active tab or URL.");
@@ -40,17 +42,13 @@ export function useBookmark() {
         ...bookmarkData,
         url,
       });
+
       return response;
     } else {
-      try {
-        const response = await bookmarkService.updateBookmark(
-          data.bookmark.id,
-          { ...bookmarkData },
-        );
-        return response;
-      } catch (err) {
-        console.log(err);
-      }
+      const response = await bookmarkService.updateBookmark(data.bookmark.id, {
+        ...bookmarkData,
+      });
+      return response;
     }
   };
 
